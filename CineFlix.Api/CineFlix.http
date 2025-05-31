@@ -1,0 +1,6 @@
+@CineFlix_HostAddress = http://localhost:5189
+
+GET {{CineFlix_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

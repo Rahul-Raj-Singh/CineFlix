@@ -4,11 +4,11 @@ namespace CineFlix.Application.Models;
 
 public class Movie
 {
-    public Guid MovieId { get; init; }
+    public Guid MovieId { get; set; }
     public string Slug => GetMovieSlug();
-    public string MovieName { get; init; }
-    public int YearOfRelease { get; init; }
-    public IEnumerable<string> Genres { get; init; } = [];
+    public string MovieName { get; set; }
+    public int YearOfRelease { get; set; }
+    public IEnumerable<string> Genres { get; set; } = [];
 
     private string GetMovieSlug()
     {

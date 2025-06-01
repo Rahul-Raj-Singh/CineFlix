@@ -1,19 +1,27 @@
-using CineFlix.Application;
 using CineFlix.Application.Services;
 using CineFlix.Contracts.Request;
 using CineFlix.Contracts.Response;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CineFlix.Controllers;
+namespace CineFlix.Api.Controllers;
 
 [ApiController]
 public class MovieController : ControllerBase
 {
     private readonly IMovieService _movieService;
+    
+    // Request validators
+    private readonly IValidator<CreateMovieRequest> _createMovieRequestValidator;
+    private readonly IValidator<UpdateMovieRequest> _updateMovieRequestValidator;
 
-    public MovieController(IMovieService movieService)
+    public MovieController(IMovieService movieService, 
+        IValidator<CreateMovieRequest> createMovieRequestValidator, 
+        IValidator<UpdateMovieRequest> updateMovieRequestValidator)
     {
         _movieService = movieService;
+        _createMovieRequestValidator = createMovieRequestValidator;
+        _updateMovieRequestValidator = updateMovieRequestValidator;
     }
     
     [HttpGet(ApiEndpoints.Movie.GetAll)]
@@ -57,6 +65,8 @@ public class MovieController : ControllerBase
     [HttpPost(ApiEndpoints.Movie.Create)]
     public async Task<IActionResult> Create([FromBody] CreateMovieRequest request)
     {
+        await _createMovieRequestValidator.ValidateAndThrowAsync(request);
+        
         var newMovie = await _movieService.Create(request);
         
         return Created(nameof(Get), newMovie);
@@ -65,6 +75,8 @@ public class MovieController : ControllerBase
     [HttpPut(ApiEndpoints.Movie.Update)]
     public async Task<IActionResult> Update([FromBody] UpdateMovieRequest request)
     {
+        await _updateMovieRequestValidator.ValidateAndThrowAsync(request);
+        
         var isSuccess = await _movieService.Update(request);
         
         if (!isSuccess) return NotFound("Cannot find movie!");

@@ -119,18 +119,23 @@ public class MovieRepository(IDbConnectionFactory dbConnectionFactory) : IMovieR
 
     public async Task<bool> Update(UpdateMovieRequest request)
     {
+        var existingMovie = await GetById(request.MovieId);
+        existingMovie.MovieName = request.MovieName;
+        existingMovie.YearOfRelease = request.YearOfRelease;
+        var updatedSlug = existingMovie.Slug;
+        
         using var connection = await dbConnectionFactory.GetConnection();
         
         using var transaction = connection.BeginTransaction();
 
         var movieUpdateSql = """
                              update dbo.movies
-                             set movie_name = @MovieName, year_of_release = @YearOfRelease
+                             set movie_name = @MovieName, year_of_release = @YearOfRelease, slug = @Slug
                              where movie_id = @MovieId
                              """;
 
         var rowsAffected = 
-            await connection.ExecuteAsync(movieUpdateSql, new {request.MovieId, request.MovieName, request.YearOfRelease});
+            await connection.ExecuteAsync(movieUpdateSql, new {request.MovieId, request.MovieName, request.YearOfRelease, Slug = updatedSlug});
         
         const string genresDeleteSql = "delete from dbo.genres where movie_id = @MovieId";
         

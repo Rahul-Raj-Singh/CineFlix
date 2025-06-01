@@ -1,3 +1,4 @@
+using CineFlix.Api.Middlewares;
 using CineFlix.Application;
 using CineFlix.Application.Database;
 
@@ -10,6 +11,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddMovieApplication();
 builder.Services.AddMovieDatabase(builder.Configuration["Database:ConnectionString"]);
+builder.Services.AddScoped<ValidationMiddleware>();
 
 var app = builder.Build();
 
@@ -25,6 +27,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<ValidationMiddleware>();
 
 var dbInitializer = app.Services.GetRequiredService<DbInitializer>();
 await dbInitializer.InitializeAsync();

@@ -1,4 +1,4 @@
-namespace CineFlix.Application;
+namespace CineFlix.Api;
 
 public static class ApiEndpoints
 {

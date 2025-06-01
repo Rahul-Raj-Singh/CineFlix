@@ -1,6 +1,8 @@
 using CineFlix.Application.Database;
 using CineFlix.Application.Repositories;
 using CineFlix.Application.Services;
+using CineFlix.Contracts;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CineFlix.Application;
@@ -11,6 +13,9 @@ public static class MovieApplicationExtensions
     {
         services.AddScoped<IMovieService, MovieService>();
         services.AddScoped<IMovieRepository, MovieRepository>();
+        
+        services.AddValidatorsFromAssemblyContaining<ICineFlixContractsAssemblyMarker>();
+        
         return services;
     }
     

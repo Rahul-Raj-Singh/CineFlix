@@ -2,6 +2,7 @@ using CineFlix.Application.Services;
 using CineFlix.Contracts.Request;
 using CineFlix.Contracts.Response;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineFlix.Api.Controllers;
@@ -62,6 +63,7 @@ public class MovieController : ControllerBase
         return Ok(movieResponse);
     }
     
+    [Authorize(AuthConstants.TrustedUserPolicyName)]
     [HttpPost(ApiEndpoints.Movie.Create)]
     public async Task<IActionResult> Create([FromBody] CreateMovieRequest request)
     {
@@ -72,6 +74,7 @@ public class MovieController : ControllerBase
         return Created(nameof(Get), newMovie);
     }
     
+    [Authorize(AuthConstants.AdminUserPolicyName)]
     [HttpPut(ApiEndpoints.Movie.Update)]
     public async Task<IActionResult> Update([FromBody] UpdateMovieRequest request)
     {

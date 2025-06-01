@@ -1,6 +1,36 @@
 @CineFlix_HostAddress = http://localhost:5189
 
-GET {{CineFlix_HostAddress}}/weatherforecast/
+### Generate token
+POST https://localhost:5003/token
+Content-Type: application/json
+
+{    
+ "userid": "d8566de3-b1a6-4a9b-b842-8e3887a82e41",
+ "email": "rrs@cineplix.com",    
+ "customClaims": {
+   "admin": "true", 
+   "trusted_member": "true"
+ }
+}
+
+### Create
+POST https://localhost:5001/api/movies
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5OTBhYmFlMC02NWIwLTQ3MTUtOGFiNS03NDIxZDQ4NjZhM2UiLCJzdWIiOiJycnNAY2luZXBsaXguY29tIiwiZW1haWwiOiJycnNAY2luZXBsaXguY29tIiwidXNlcmlkIjoiZDg1NjZkZTMtYjFhNi00YTliLWI4NDItOGUzODg3YTgyZTQxIiwiYWRtaW4iOiJ0cnVlIiwidHJ1c3RlZF9tZW1iZXIiOiJ0cnVlIiwibmJmIjoxNzQ4NzgyNjA4LCJleHAiOjE3NDg4MTE0MDgsImlhdCI6MTc0ODc4MjYwOCwiaXNzIjoiaHR0cHM6Ly9hbG1pZ2h0eS10b2tlbi1nZW5lcmF0b3IuY29tIiwiYXVkIjoiaHR0cHM6Ly9jaW5mZWZsaXguY29tIn0.hPmy8juDM_AjlHv8TWaz6OwKsyYCyuELPtdN9xqcB3E
+
+{
+  "movieName": "Mob Psycho",
+  "yearOfRelease": 2025,
+  "genres": [
+    "Action",
+    "Thriller"
+  ]
+}
+
+### Get single
+GET https://localhost:5001/api/movies/jurassic-world-2015
 Accept: application/json
 
-###
+### Get all
+GET https://localhost:5001/api/movies
+Accept: application/json
